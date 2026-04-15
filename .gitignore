@@ -1,0 +1,14 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Build
+/out/
+target/
+
+# Sistema
+.DS_Store
+*.log
+
+# Outros
+node_modules/
