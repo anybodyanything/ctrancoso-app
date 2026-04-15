@@ -1,6 +1,5 @@
 const request = require("supertest");
 require('dotenv').config();
-const db = require("../src/db");
 const { createApp } = require("../src/app");
 
 describe("GET /api/db-time", () => {
