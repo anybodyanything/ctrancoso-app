@@ -6,7 +6,7 @@ Projeto mínimo com:
   - `GET /api/health` (sem DB)
   - `GET /api/db-time` (com Postgres)
 - Postgres via Docker Compose
-- 1 teste unitário (Jest + Supertest) para `/api/health`
+- 2 testes unitários (Jest + Supertest) para `/api/health` e `/api/db-Time`
 
 ## Requisitos
 - Node.js 18+ (ou 20+)

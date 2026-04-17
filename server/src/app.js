@@ -12,7 +12,7 @@ function createApp() {
   app.get("/api/health", (req, res) => {
     res.json({
       ok: true,
-      service: "example-server",
+      service: "ctrancoso-server",
       now: new Date().toISOString()
     });
   });
