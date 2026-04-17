@@ -1,7 +1,7 @@
 module "global" {
   source              = "../../modules/global"
   environment         = "dev"
-  resource_group_name = ""
+  resource_group_name = "rg-kiwauno-global"
 }
 
 module "static_web_app" {
