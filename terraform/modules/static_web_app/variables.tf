@@ -1,9 +1,20 @@
-variable "storage_account_name" {
-  type = string
-  default = "name of the storage account for frontend build"
+variable "name" {
+  type        = string
+  description = "Name of the Azure Static Web App"
 }
 
-variable "container_name" {
-  type = string
-  description = "Name of the blob container for frontend build"
+variable "location" {
+  type        = string
+  description = "Azure region to deploy the Static Web App"
+}
+
+variable "resource_group_name" {
+  type        = string
+  description = "Resource group for the Static Web App"
+}
+
+variable "sku_tier" {
+  type        = string
+  description = "SKU tier for the Static Web App (Free or Standard)"
+  default     = "Free"
 }
