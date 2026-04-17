@@ -1,19 +1,40 @@
-# IntelliJ
-.idea/
-*.iml
-
-# Build
-/out/
-target/
-
-# Sistema
-.DS_Store
-*.log
-
-# Outros
-node_modules/
+# Node.js dependencies and logs (for server)
+server/node_modules/
+server/package-lock.json
+server/npm-debug.log*
+server/yarn-debug.log*
+server/yarn-error.log*
 
 # Environment variables
-.env
-.env.local
-.env.*.local
+server/.env
+server/.env.local
+server/.env.*.local
+
+# Client build artifacts (if any)
+client/client-build.zip
+
+# Terraform local files and state
+terraform/.terraform/
+terraform/**/*.tfstate
+terraform/**/*.tfstate.backup
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/*.tfvars # if you keep secrets in tfvars locally
+terraform/*.tfvars.json
+
+# Terraform crash logs
+crash.log
+
+# IDE/editor config files (JetBrains IDEA)
+.idea/
+terraform/.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Optional: Ignore coverage reports if you use Jest or other tests in server
+server/coverage/
