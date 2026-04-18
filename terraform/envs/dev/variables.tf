@@ -51,3 +51,29 @@ variable "tags" {
     project     = "terraform-aks"
   }
 }
+
+#postgres variables
+variable "administrator_login" {
+  type = string
+  default = "pgadmin"
+}
+
+variable "administrator_password" {
+  type = string
+  sensitive = true
+}
+
+variable "server_name" {
+  type = string
+  default = "dev-postgres-server"
+}
+
+variable "database_name" {
+  type = string
+  default = "ctrancoso-dev-db"
+}
+
+variable "allowed_ip_ranges" {
+  type    = list(string)
+  default = [20.50.254.61]
+}

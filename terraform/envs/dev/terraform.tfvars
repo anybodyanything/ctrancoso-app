@@ -1,4 +1,5 @@
-static_app_name      = "kiwauno-dev-static-app"
-location            = "West Europe"
 resource_group_name = "rg-kiwauno-global"
+location            = "West Europe"
 sku_tier            = "Free"
+static_app_name      = "kiwauno-dev-static-app"
+administrator_password = "replace"
