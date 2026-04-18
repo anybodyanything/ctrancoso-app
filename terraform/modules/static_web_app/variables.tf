@@ -5,16 +5,16 @@ variable "name" {
 
 variable "location" {
   type        = string
-  description = "Azure region to deploy the Static Web App"
+  description = "Azure region to deploy"
 }
 
 variable "resource_group_name" {
   type        = string
-  description = "Resource group for the Static Web App"
+  description = "Resource group name"
 }
 
 variable "sku_tier" {
   type        = string
-  description = "SKU tier for the Static Web App (Free or Standard)"
+  description = "SKU tier (Free or Standard)"
   default     = "Free"
 }

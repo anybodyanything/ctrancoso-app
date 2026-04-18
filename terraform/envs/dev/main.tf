@@ -11,3 +11,12 @@ module "static_web_app" {
   resource_group_name = var.resource_group_name
   sku_tier            = var.sku_tier
 }
+
+module "aks" {
+  source = "../../modules/kubernetes_service"
+  cluster_name = var.cluster_name
+  dns_prefix = var.dns_prefix
+  kubernetes_version = var.kubernetes_version
+  location = var.location
+  resource_group_name = var.resource_group_name
+}
