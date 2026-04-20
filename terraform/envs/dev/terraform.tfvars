@@ -1,5 +1,7 @@
 static_app_name     = "kiwauno-dev-static-app"
 global_region       = "northeurope"
 frontend_region     = "westeurope"
-resource_group_name = "rg-kiwauno-global"
+resource_group_name = "rg-kiwauno-dev"
 sku_tier            = "Free"
+admin_password = "20kiwauno-ctrancoso26"
+local_ip          = "87.196.80.8"
