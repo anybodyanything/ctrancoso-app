@@ -57,3 +57,14 @@ variable "tags" {
     project     = "terraform-aks"
   }
 }
+
+#postgres variables
+variable "admin_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "local_ip" {
+  type    = string
+  default = null
+}

@@ -22,3 +22,16 @@ module "aks" {
   dns_prefix          = var.dns_prefix
   kubernetes_version  = var.kubernetes_version
 }
+
+module "postgreSQL" {
+  source = "../../modules/postgres_db"
+
+  server_name = "${local.project}-${local.env}-postgres-server"
+  admin_password      = var.admin_password
+  admin_user          = "pgadmin"
+  db_name             = "${local.project}-${local.env}-database"
+  location            = var.global_region
+  resource_group_name = var.resource_group_name
+
+  local_ip = var.local_ip
+}
