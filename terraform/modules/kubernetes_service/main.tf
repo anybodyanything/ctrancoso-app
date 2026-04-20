@@ -1,5 +1,5 @@
 resource "azurerm_kubernetes_cluster" "backend-aks" {
-  name                = var.cluster_name
+  name                = var.name
   location            = var.location
   resource_group_name = var.resource_group_name
   dns_prefix          = var.dns_prefix
@@ -22,6 +22,10 @@ resource "azurerm_kubernetes_cluster" "backend-aks" {
   }
 
   oidc_issuer_enabled = true
+
+  lifecycle {
+    prevent_destroy = true
+  }
 
 }
 

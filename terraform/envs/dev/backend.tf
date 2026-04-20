@@ -1,8 +1,8 @@
 terraform {
   backend "azurerm" {
-    resource_group_name   = "rg-kiwauno-global"
-    storage_account_name  = "kiwaunostorage01"
-    container_name        = "tfstate"
-    key                   = "dev.terraform.tfstate"
+    resource_group_name  = "rg-tfstate"
+    storage_account_name = "tfstatekiwauno"
+    container_name       = "tfstate"
+    key                  = "dev.tfstate"
   }
 }

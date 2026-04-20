@@ -4,8 +4,14 @@ variable "resource_group_name" {
   type = string
 }
 
-variable "location" {
-  type = string
+variable "global_region" {
+  type    = string
+  default = "northeurope"
+}
+
+variable "frontend_region" {
+  type    = string
+  default = "westeurope"
 }
 
 variable "sku_tier" {

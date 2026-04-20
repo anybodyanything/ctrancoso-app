@@ -1,4 +1,5 @@
-static_app_name      = "kiwauno-dev-static-app"
-location            = "West Europe"
+static_app_name     = "kiwauno-dev-static-app"
+global_region       = "northeurope"
+frontend_region     = "westeurope"
 resource_group_name = "rg-kiwauno-global"
 sku_tier            = "Free"
