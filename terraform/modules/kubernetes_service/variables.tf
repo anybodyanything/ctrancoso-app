@@ -4,7 +4,7 @@ variable "location" {
 }
 
 variable "name" {
-  type = string
+  type        = string
   description = "Name of the Azure Kubernetes Service"
 }
 

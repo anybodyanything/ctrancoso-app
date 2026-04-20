@@ -13,9 +13,5 @@ resource "azurerm_postgresql_flexible_server" "kiwauno_flex_server" {
 
   backup_retention_days = 7
 
-  zone = var.zone
-
-  lifecycle {
-    prevent_destroy = true
-  }
+  zone = "3"
 }
