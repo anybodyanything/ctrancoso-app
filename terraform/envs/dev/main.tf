@@ -22,16 +22,32 @@ module "aks" {
   dns_prefix          = var.dns_prefix
   kubernetes_version  = var.kubernetes_version
 }
+data "azurerm_client_config" "current_context" {}
+
+module "key_vault" {
+  source = "../../modules/key_vault"
+
+  name                = "${local.project}-${local.env}-kv"
+  location            = var.global_region
+  resource_group_name = module.resource_group.resource_group_name
+  tenant_id           = data.azurerm_client_config.current_context.tenant_id
+}
+
+resource "random_password" "db_password" {
+  length  = 16
+  special = true
+}
 
 module "postgreSQL" {
   source = "../../modules/postgres_db"
 
-  server_name = "${local.project}-${local.env}-postgres-server"
-  admin_password      = var.admin_password
+  server_name         = "${local.project}-${local.env}-postgres-server"
+  admin_password      = random_password.db_password.result
   admin_user          = "pgadmin"
   db_name             = "${local.project}-${local.env}-database"
   location            = var.global_region
-  resource_group_name = var.resource_group_name
+  resource_group_name = module.resource_group.resource_group_name
 
-  local_ip = var.local_ip
+  local_ip    = var.local_ip
+  can_destroy = local.can_destroy
 }

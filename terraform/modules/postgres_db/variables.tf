@@ -20,17 +20,17 @@ variable "admin_password" {
 }
 
 variable "sku_name" {
-  type = string
+  type    = string
   default = "B_Standard_B1ms"
 }
 
 variable "postgres_version" {
-  type = string
+  type    = string
   default = "14"
 }
 
 variable "storage_mb" {
-  type = number
+  type    = number
   default = 32768
 }
 
@@ -38,12 +38,11 @@ variable "db_name" {
   type = string
 }
 
-variable "zone" {
+variable "local_ip" {
   type    = string
   default = null
 }
 
-variable "local_ip" {
-  type = string
-  default = null
+variable "can_destroy" {
+  type = bool
 }
