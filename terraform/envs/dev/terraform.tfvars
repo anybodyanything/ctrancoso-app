@@ -1,6 +1,0 @@
-static_app_name     = "kiwauno-dev-static-app"
-global_region       = "northeurope"
-frontend_region     = "westeurope"
-resource_group_name = "rg-kiwauno-dev"
-sku_tier            = "Free"
-local_ip            = "87.196.80.8"
