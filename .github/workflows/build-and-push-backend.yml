@@ -23,6 +23,9 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     environment: ${{ inputs.env }}
+    env:
+      ACR_NAME: ${{ inputs.env == 'prod' && vars.ACR_NAME_PROD || vars.ACR_NAME_DEV }}
+      ACR_LOGIN_SERVER: ${{ inputs.env == 'prod' && vars.ACR_LOGIN_SERVER_PROD || vars.ACR_LOGIN_SERVER_DEV }}
     outputs:
       image_tag: ${{ steps.tag_setup.outputs.image_tag }}
       image_ref: ${{ steps.tag_setup.outputs.image_ref }}
@@ -66,13 +69,13 @@ jobs:
             IMAGE_TAG="${BRANCH}-${SHORT_SHA}"
           fi
 
-          IMAGE_REF="${{ vars.ACR_LOGIN_SERVER }}/backend:${IMAGE_TAG}"
+          IMAGE_REF="${ACR_LOGIN_SERVER}/backend:${IMAGE_TAG}"
 
           echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
           echo "image_ref=${IMAGE_REF}" >> "$GITHUB_OUTPUT"
 
       - name: Login to ACR
-        run: az acr login --name ${{ vars.ACR_NAME }}
+        run: az acr login --name "$ACR_NAME"
 
       - name: Build image
         run: |
