@@ -65,8 +65,8 @@ resource "kubernetes_secret_v1" "postgres" {
   ]
 }
 
-/*
-resource "kubernetes_deployment_v1" "app" {
+
+/*resource "kubernetes_deployment_v1" "app" {
   metadata {
     name = "backend"
     labels = {
@@ -76,6 +76,15 @@ resource "kubernetes_deployment_v1" "app" {
 
   spec {
     replicas = 2
+
+    strategy {
+      type = "RollingUpdate"
+
+      rolling_update {
+        max_unavailable = 0
+        max_surge       = 1
+      }
+    }
 
     selector {
       match_labels = {
@@ -113,6 +122,16 @@ resource "kubernetes_deployment_v1" "app" {
               }
             }
           }
+
+          readiness_probe {
+            http_get {
+              path = "/api/health"
+              port = 8080
+            }
+
+            initial_delay_seconds = 5
+            period_seconds        = 5
+          }
         }
       }
     }
@@ -140,8 +159,8 @@ resource "kubernetes_service_v1" "backend" {
 
     type = "LoadBalancer"
   }
-}
-*/
+}*/
+
 
 module "acr" {
   source              = "../../modules/container_registry"
