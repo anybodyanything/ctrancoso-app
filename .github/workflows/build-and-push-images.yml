@@ -1,0 +1,89 @@
+name: Build and Push Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Environment:"
+        required: true
+        type: choice
+        options:
+          - 'dev'
+          - 'prod'
+      deploy_aks:
+        description: "Deploy to AKS?"
+        type: boolean
+        default: false
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+#  run-tests:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Setup Node
+#        uses: actions/setup-node@v4
+#        with:
+#          node-version: 18
+#
+#      - name: Install backend dependencies
+#        run: npm ci
+#        working-directory: ./server
+#
+#      - name: Run backend tests
+#        run: npm test
+#        working-directory: ./server
+
+  build-and-push:
+#    needs: run-tests
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.env }}
+
+    env:
+      ACR_NAME: ${{ inputs.env == 'prod' && vars.ACR_NAME_PROD || vars.ACR_NAME_DEV }}
+      ACR_LOGIN_SERVER: ${{ inputs.env == 'prod' && vars.ACR_LOGIN_SERVER_PROD || vars.ACR_LOGIN_SERVER_DEV }}
+
+    outputs:
+      env: ${{ inputs.env }}
+      image_tag: ${{ steps.vars.outputs.image_tag }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Set image tag
+        id: vars
+        run: echo "image_tag=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Login to ACR
+        run: az acr login --name "$ACR_NAME"
+
+      - name: Build and push backend
+        run: |
+          docker build -t $ACR_LOGIN_SERVER/backend:${{ steps.vars.outputs.image_tag }} ./server
+          docker push $ACR_LOGIN_SERVER/backend:${{ steps.vars.outputs.image_tag }}
+
+      - name: Build and push frontend
+        run: |
+          docker build -t $ACR_LOGIN_SERVER/frontend:${{ steps.vars.outputs.image_tag }} ./client
+          docker push $ACR_LOGIN_SERVER/frontend:${{ steps.vars.outputs.image_tag }}
+
+  deploy-aks:
+    if: ${{ inputs.deploy_aks }}
+    needs: build-and-push
+    uses: ./.github/workflows/deploy-aks.yml
+    with:
+      env: ${{ needs.build-and-push.outputs.env }}
+      image_tag: ${{ needs.build-and-push.outputs.image_tag }}
+    secrets: inherit

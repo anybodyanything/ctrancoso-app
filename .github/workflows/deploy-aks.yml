@@ -1,15 +1,26 @@
-name: Deploy backend image to AKS
+name: Deploy App to AKS
 
 on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Environment"
+        required: true
+        type: choice
+        options:
+          - 'dev'
+          - 'prod'
+      image_tag:
+        description: "Image tag"
+        required: true
+        type: string
+
   workflow_call:
     inputs:
       env:
         required: true
         type: string
       image_tag:
-        required: true
-        type: string
-      image_ref:
         required: true
         type: string
 
@@ -21,11 +32,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: ${{ inputs.env }}
+
     env:
+      ACR_LOGIN_SERVER: ${{ inputs.env == 'prod' && vars.ACR_LOGIN_SERVER_PROD || vars.ACR_LOGIN_SERVER_DEV }}
       RESOURCE_GROUP: ${{ inputs.env == 'prod' && vars.AZURE_RESOURCE_GROUP_PROD || vars.AZURE_RESOURCE_GROUP_DEV }}
       CLUSTER_NAME: ${{ inputs.env == 'prod' && vars.AKS_CLUSTER_NAME_PROD || vars.AKS_CLUSTER_NAME_DEV }}
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Log in to Azure
         uses: azure/login@v3
         with:
@@ -37,12 +52,22 @@ jobs:
         run: |
           az aks get-credentials \
             --resource-group "$RESOURCE_GROUP" \
-            --name "$CLUSTER_NAME"
+            --name "$CLUSTER_NAME" \
 
-      - name: Update image
+      - name: Deploy backend
         run: |
-          kubectl set image deployment/backend backend=${{ inputs.image_ref }}
+          kubectl set image deployment/backend \
+            backend=$ACR_LOGIN_SERVER/backend:${{ inputs.image_tag }} \
+            --namespace default
 
-      - name: Confirm rollout
+      - name: Deploy frontend
         run: |
-          kubectl rollout status deployment/backend
+          kubectl set image deployment/frontend \
+            frontend=$ACR_LOGIN_SERVER/frontend:${{ inputs.image_tag }} \
+            --namespace default
+
+      - name: Wait for backend rollout
+        run: kubectl rollout status deployment/backend --namespace default --timeout=180s
+
+      - name: Wait for frontend rollout
+        run: kubectl rollout status deployment/frontend --namespace default --timeout=180s
