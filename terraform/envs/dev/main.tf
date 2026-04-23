@@ -65,26 +65,18 @@ resource "kubernetes_secret_v1" "postgres" {
   ]
 }
 
+variable "image_ref" {
+  type = string
+}
 
-/*resource "kubernetes_deployment_v1" "app" {
+resource "kubernetes_deployment_v1" "app" {
   metadata {
     name = "backend"
-    labels = {
-      app = "backend"
-    }
+    namespace = "default"
   }
 
   spec {
     replicas = 2
-
-    strategy {
-      type = "RollingUpdate"
-
-      rolling_update {
-        max_unavailable = 0
-        max_surge       = 1
-      }
-    }
 
     selector {
       match_labels = {
@@ -102,25 +94,10 @@ resource "kubernetes_secret_v1" "postgres" {
       spec {
         container {
           name  = "backend"
-          image = "${module.acr.login_server}/backend:latest"
+          image = var.image_ref
 
           port {
             container_port = 8080
-          }
-
-          env {
-            name = "PORT"
-            value = "8080"
-          }
-
-          env {
-            name = "DATABASE_URL"
-            value_from {
-              secret_key_ref {
-                name = kubernetes_secret_v1.postgres.metadata[0].name
-                key  = "DATABASE_URL"
-              }
-            }
           }
 
           readiness_probe {
@@ -128,39 +105,29 @@ resource "kubernetes_secret_v1" "postgres" {
               path = "/api/health"
               port = 8080
             }
-
             initial_delay_seconds = 5
             period_seconds        = 5
+          }
+
+          env {
+            name  = "PORT"
+            value = "8080"
+          }
+
+          env {
+            name = "DATABASE_URL"
+            value_from {
+              secret_key_ref {
+                name = "postgres-secret"
+                key  = "DATABASE_URL"
+              }
+            }
           }
         }
       }
     }
   }
-
-  depends_on = [
-    azurerm_role_assignment.aks_acr_pull
-  ]
 }
-
-resource "kubernetes_service_v1" "backend" {
-  metadata {
-    name = "backend-service"
-  }
-
-  spec {
-    selector = {
-      app = "backend"
-    }
-
-    port {
-      port        = 80
-      target_port = 8080
-    }
-
-    type = "LoadBalancer"
-  }
-}*/
-
 
 module "acr" {
   source              = "../../modules/container_registry"
