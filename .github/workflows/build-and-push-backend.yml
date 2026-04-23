@@ -8,8 +8,8 @@ on:
         required: true
         type: choice
         options:
-          - dev
-          - prod
+          - 'dev'
+          - 'prod'
       deploy_aks:
         description: 'Deploy to AKS?'
         type: boolean
