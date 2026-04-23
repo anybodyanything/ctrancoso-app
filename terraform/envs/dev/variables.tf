@@ -1,5 +1,4 @@
 #general
-
 variable "resource_group_name" {
   type = string
 }
@@ -9,19 +8,9 @@ variable "global_region" {
   default = "northeurope"
 }
 
-variable "frontend_region" {
-  type    = string
-  default = "westeurope"
-}
-
 variable "sku_tier" {
   type    = string
   default = "Free"
-}
-
-#static web app vars
-variable "static_app_name" {
-  type = string
 }
 
 #aks vars
