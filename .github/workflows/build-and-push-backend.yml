@@ -22,6 +22,7 @@ permissions:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.env }}
     outputs:
       image_tag: ${{ steps.tag_setup.outputs.image_tag }}
       image_ref: ${{ steps.tag_setup.outputs.image_ref }}
@@ -57,11 +58,12 @@ jobs:
         shell: bash
         run: |
           SHORT_SHA="${GITHUB_SHA::7}"
-          BRANCH=${GITHUB_REF##*/}
+          BRANCH="${GITHUB_REF##*/}"
+
           if [ "${{ inputs.env }}" = "prod" ]; then
             IMAGE_TAG="latest"
           else
-            IMAGE_TAG="${branch}-${SHORT_SHA}"
+            IMAGE_TAG="${BRANCH}-${SHORT_SHA}"
           fi
 
           IMAGE_REF="${{ vars.ACR_LOGIN_SERVER }}/backend:${IMAGE_TAG}"
