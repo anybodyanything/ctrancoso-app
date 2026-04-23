@@ -14,9 +14,8 @@ on:
         type: string
 
 permissions:
-   id-token: write
-   contents: read
-
+  id-token: write
+  contents: read
 
 jobs:
   deploy:
@@ -42,5 +41,5 @@ jobs:
           kubectl set image deployment/backend backend=${{ inputs.image_ref }}
 
       - name: Confirm rollout
-        run:|
+        run: |
           kubectl rollout status deployment/backend
