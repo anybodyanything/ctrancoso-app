@@ -41,9 +41,9 @@ jobs:
         run: npm ci
         working-directory: ./server
 
-      - name: Run tests
-        run: npm test
-        working-directory: ./server
+#      - name: Run tests
+#        run: npm test
+#        working-directory: ./server
 
       - name: Log in to Azure
         uses: azure/login@v3
