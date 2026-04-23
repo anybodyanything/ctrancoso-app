@@ -40,12 +40,10 @@ module "postgreSQL" {
   db_name             = "${local.project}-${local.env}-database"
   location            = var.global_region
   resource_group_name = module.resource_group.resource_group_name
-  zone                = var.zone
 
   depends_on = [
     module.resource_group
   ]
-
 }
 
 resource "kubernetes_secret_v1" "postgres" {
@@ -55,17 +53,25 @@ resource "kubernetes_secret_v1" "postgres" {
 
   data = {
     host     = module.postgreSQL.fqdn
-    user     = var.admin_user
+    user     = "pgadmin"
     password = var.admin_password
     db       = module.postgreSQL.db_name
+    DATABASE_URL = "postgresql://pgadmin:${var.admin_password}@${module.postgreSQL.fqdn}:5432/${module.postgreSQL.db_name}?sslmode=require"
   }
 
-  depends_on = [module.aks]
+  depends_on = [
+    module.aks,
+    module.postgreSQL
+  ]
 }
 
+/*
 resource "kubernetes_deployment_v1" "app" {
   metadata {
     name = "backend"
+    labels = {
+      app = "backend"
+    }
   }
 
   spec {
@@ -87,14 +93,23 @@ resource "kubernetes_deployment_v1" "app" {
       spec {
         container {
           name  = "backend"
-          image = "your-image:latest"
+          image = "${module.acr.login_server}/backend:latest"
+
+          port {
+            container_port = 8080
+          }
 
           env {
-            name = "DB_HOST"
+            name = "PORT"
+            value = "8080"
+          }
+
+          env {
+            name = "DATABASE_URL"
             value_from {
               secret_key_ref {
                 name = kubernetes_secret_v1.postgres.metadata[0].name
-                key  = "host"
+                key  = "DATABASE_URL"
               }
             }
           }
@@ -102,6 +117,10 @@ resource "kubernetes_deployment_v1" "app" {
       }
     }
   }
+
+  depends_on = [
+    azurerm_role_assignment.aks_acr_pull
+  ]
 }
 
 resource "kubernetes_service_v1" "backend" {
@@ -121,4 +140,21 @@ resource "kubernetes_service_v1" "backend" {
 
     type = "LoadBalancer"
   }
+}
+*/
+
+module "acr" {
+  source              = "../../modules/container_registry"
+  name                = "${local.project}${local.env}acr"
+  resource_group_name = module.resource_group.resource_group_name
+  location            = var.global_region
+  sku                 = "Basic"
+  admin_enabled       = false
+}
+
+#gets the AKS object id to define the role assignment
+resource "azurerm_role_assignment" "aks_acr_pull" {
+  scope                = module.acr.id
+  role_definition_name = "AcrPull"
+  principal_id         = module.aks.kubelet_object_id
 }
