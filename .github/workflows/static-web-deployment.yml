@@ -1,0 +1,36 @@
+name: Deploy Static Web App
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Environment"
+        required: true
+        type: choice
+        options:
+          - 'dev'
+          - 'prod'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.env }}
+    env:
+      STATIC_WEB_APP_API_TOKEN: ${{ inputs.env == 'prod' && secrets.STATIC_WEB_APP_TOKEN_PROD|| secrets.STATIC_WEB_APP_TOKEN_DEV }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select environment config
+        run: cp client/config.${{ inputs.env }}.js client/config.js
+
+      - name: Deploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ env.STATIC_WEB_APP_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: upload
+          app_location: client
+          api_location: ""
+          output_location: ""
+          skip_app_build: true
