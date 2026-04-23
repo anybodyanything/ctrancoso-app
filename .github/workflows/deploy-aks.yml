@@ -36,7 +36,7 @@ jobs:
       - name: Get AKS credentials
         run: |
           az aks get-credentials \
-            --resource-group "$RESOURCE_GROUP"
+            --resource-group "$RESOURCE_GROUP" \
             --name ""$CLUSTER_NAME"
 
       - name: Update image
