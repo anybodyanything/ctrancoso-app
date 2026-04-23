@@ -52,10 +52,10 @@ resource "kubernetes_secret_v1" "postgres" {
   }
 
   data = {
-    host     = module.postgreSQL.fqdn
-    user     = "pgadmin"
-    password = var.admin_password
-    db       = module.postgreSQL.db_name
+    host         = module.postgreSQL.fqdn
+    user         = "pgadmin"
+    password     = var.admin_password
+    db           = module.postgreSQL.db_name
     DATABASE_URL = "postgresql://pgadmin:${var.admin_password}@${module.postgreSQL.fqdn}:5432/${module.postgreSQL.db_name}?sslmode=require"
   }
 
@@ -71,7 +71,7 @@ variable "image_ref" {
 
 resource "kubernetes_deployment_v1" "app" {
   metadata {
-    name = "backend"
+    name      = "backend"
     namespace = "default"
   }
 
@@ -127,6 +127,30 @@ resource "kubernetes_deployment_v1" "app" {
       }
     }
   }
+}
+
+resource "kubernetes_service_v1" "backend" {
+  metadata {
+    name      = "backend"
+    namespace = "default"
+  }
+
+  spec {
+    selector = {
+      app = "backend"
+    }
+
+    port {
+      port        = 80
+      target_port = 8080
+    }
+
+    type = "LoadBalancer"
+  }
+
+  depends_on = [
+    kubernetes_deployment_v1.app
+  ]
 }
 
 module "acr" {
