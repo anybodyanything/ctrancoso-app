@@ -58,7 +58,7 @@ jobs:
         run: |
           SHORT_SHA="${GITHUB_SHA::7}"
           BRANCH=${GITHUB_REF##*/}
-          if [ "${{ inputs.environment }}" = "prod" ]; then
+          if [ "${{ inputs.env }}" = "prod" ]; then
             IMAGE_TAG="latest"
           else
             IMAGE_TAG="${branch}-${SHORT_SHA}"
@@ -87,7 +87,7 @@ jobs:
     needs: build-and-push
     uses: ./.github/workflows/deploy-aks.yml
     with:
-      environment: ${{ inputs.environment }}
+      environment: ${{ inputs.env }}
       image_tag: ${{ needs.build-and-push.outputs.image_tag }}
       image_ref: ${{ needs.build-and-push.outputs.image_ref }}
     secrets: inherit
