@@ -39,7 +39,7 @@ on:
 
         - name: Update image
           run: |
-            kubectl set image deployment/backend backend=${ inputs.image_ref }}
+            kubectl set image deployment/backend backend=${{ inputs.image_ref }}
 
         - name: Confirm rollout
           run:|
