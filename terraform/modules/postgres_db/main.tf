@@ -10,6 +10,7 @@ resource "azurerm_postgresql_flexible_server" "kiwauno_flex_server" {
   sku_name   = var.sku_name
   version    = var.postgres_version
   storage_mb = var.storage_mb
+  zone       = var.zone
 
   backup_retention_days = 7
 

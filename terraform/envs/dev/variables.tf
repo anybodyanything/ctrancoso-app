@@ -51,7 +51,7 @@ variable "vm_size" {
 }
 
 variable "tags" {
-  type    = map(string)
+  type = map(string)
   default = {
     environment = "dev"
     project     = "terraform-aks"
@@ -60,11 +60,16 @@ variable "tags" {
 
 #postgres variables
 variable "admin_user" {
-  type = string
+  type    = string
   default = "pgadmin"
 }
 
 variable "admin_password" {
   type      = string
   sensitive = true
+}
+
+variable "zone" {
+  type    = string
+  default = "1"
 }

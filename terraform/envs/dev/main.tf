@@ -34,12 +34,13 @@ module "aks" {
 module "postgreSQL" {
   source = "../../modules/postgres_db"
 
-  server_name = "${local.project}-${local.env}-postgres-server"
+  server_name         = "${local.project}-${local.env}-postgres-server"
   admin_password      = var.admin_password
   admin_user          = "pgadmin"
   db_name             = "${local.project}-${local.env}-database"
   location            = var.global_region
   resource_group_name = module.resource_group.resource_group_name
+  zone                = var.zone
 
   depends_on = [
     module.resource_group
