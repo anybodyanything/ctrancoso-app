@@ -73,3 +73,12 @@ variable "zone" {
   type    = string
   default = "1"
 }
+
+variable "image_ref" {
+  type = string
+}
+
+variable "frontend_image_ref" {
+  type        = string
+  description = "Docker image from static frontend"
+}
