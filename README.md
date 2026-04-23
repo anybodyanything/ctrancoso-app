@@ -15,24 +15,13 @@ Projeto mínimo com:
 ## Subir a DB
 ```bash
 docker compose up -d
-Local development access (optional):
 
-To allow your machine to access the database:
-
-1. Find your public IP:
-   https://whatismyip.com
-
-2. Set it in terraform.tfvars:
-
-local_ip = "YOUR_IP"
-
-If not set, only Azure services (AKS, pipelines) can access the database.
 ```
 
 ## API
 ```bash
 cd server
-cp .env.example .env
+cp .env .env
 npm install
 npm run start
 ```
