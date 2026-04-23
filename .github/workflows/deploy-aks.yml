@@ -35,8 +35,8 @@ jobs:
 
     env:
       ACR_LOGIN_SERVER: ${{ inputs.env == 'prod' && vars.ACR_LOGIN_SERVER_PROD || vars.ACR_LOGIN_SERVER_DEV }}
-      RESOURCE_GROUP: ${{ inputs.env == 'prod' && vars.RESOURCE_GROUP_PROD || vars.RESOURCE_GROUP_DEV }}
-      AKS_CLUSTER_NAME: ${{ inputs.env == 'prod' && vars.AKS_CLUSTER_NAME_PROD || vars.AKS_CLUSTER_NAME_DEV }}
+      RESOURCE_GROUP: ${{ inputs.env == 'prod' && vars.AZURE_RESOURCE_GROUP_PROD || vars.AZURE_RESOURCE_GROUP_DEV }}
+      CLUSTER_NAME: ${{ inputs.env == 'prod' && vars.AKS_CLUSTER_NAME_PROD || vars.AKS_CLUSTER_NAME_DEV }}
 
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
         run: |
           az aks get-credentials \
             --resource-group "$RESOURCE_GROUP" \
-            --name "$AKS_CLUSTER_NAME" \
+            --name "$CLUSTER_NAME" \
 
       - name: Deploy backend
         run: |
