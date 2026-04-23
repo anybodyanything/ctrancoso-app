@@ -6,4 +6,6 @@ const app = createApp();
 
 app.listen(PORT, () => {
   console.log(`API a correr em http://localhost:${PORT}`);
+  console.log("cwd:", process.cwd());
+  console.log("env:", process.env.DATABASE_URL);
 });

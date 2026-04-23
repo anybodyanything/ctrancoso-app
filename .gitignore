@@ -14,13 +14,12 @@ server/.env.*.local
 client/client-build.zip
 
 # Terraform local files and state
-terraform/.terraform/
-terraform/**/*.tfstate
-terraform/**/*.tfstate.backup
-terraform/terraform.tfstate
-terraform/terraform.tfstate.backup
-terraform/*.tfvars # if you keep secrets in tfvars locally
-terraform/*.tfvars.json
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+.crash.log
+*.tfvars
+*.tfvars.json
 
 # Terraform crash logs
 crash.log
