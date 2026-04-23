@@ -87,7 +87,7 @@ jobs:
     needs: build-and-push
     uses: ./.github/workflows/deploy-aks.yml
     with:
-      environment: ${{ inputs.env }}
+      env: ${{ inputs.env }}
       image_tag: ${{ needs.build-and-push.outputs.image_tag }}
       image_ref: ${{ needs.build-and-push.outputs.image_ref }}
     secrets: inherit
