@@ -24,7 +24,7 @@ resource "azurerm_kubernetes_cluster" "backend-aks" {
   oidc_issuer_enabled = true
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
 }
