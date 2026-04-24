@@ -82,13 +82,13 @@ npm start
 API:
 http://localhost:3000
 
-##Run Frontend
+## Run Frontend
 ```bash
 cd client
 npx serve client
 ```
 
-##Tests
+## Tests
 ```bash
 cd server
 npm test
@@ -97,15 +97,15 @@ Requires new npm install in case you haven't done yet.
 
 In CI/CD, the pipeline runs the tests, and if not passed, the build stops, and images are not pushed to ACR.
 
-#Infrastructure (Terraform)
-##Components
+# Infrastructure (Terraform)
+## Components
 - AKS (Kubernetes cluster)
 - ACR (Container Registry)
 - PostgreSQL (Azure)
 - Ingress Controller
 - Monitoring (Prometheus + Grafana)
 
-#Deploy infrastructure
+# Deploy infrastructure
 ```bash
 cd .\terraform\envs\*
 terraform init
@@ -113,12 +113,12 @@ terraform plan -var-file="terraform.tfvars"
 terraform apply -var-file="terraform.tfvars"
 ````
 
-##CI Approval Flow (to be finished)
+## CI Approval Flow (to be finished)
 - terraform plan runs automatically
 - terraform apply requires manual approval
 
-#Application Deployment
-##Step 1 — Build & Push Images
+# Application Deployment
+## Step 1 — Build & Push Images
 
 Workflow: Build and Push Images
 
@@ -134,7 +134,7 @@ Outputs:
 <ACR>/frontend:<commit-sha>
 ````
 
-##Step 2 — Deploy to AKS
+## Step 2 — Deploy to AKS
 For automatic deployment after Build and Push
 ```bash
 deploy_aks = true
@@ -145,13 +145,13 @@ env: dev | prod  - mandatory
 image_tag: <tag> - mandatory
 ````
 
-#Logs & Uptime
-##Healthcheck
+# Logs & Uptime
+## Healthcheck
 ```bash
 curl http://<your-ingress-host>/api/health
 ````
 
-##Logs
+## Logs
 Backend
 ```bash
 kubectl logs -l app=backend
@@ -163,11 +163,11 @@ Frontend
 kubectl logs -l app=frontend
 ````
 
-#Monitoring
+# Monitoring
 - Prometheus for metrics
 - Grafana for dashboards
 
-##Access
+## Access
 ```bash
 http://<your-ingress-host>/grafana
 ````
@@ -178,9 +178,9 @@ username: admin
 password: defined via Terraform variable
 ````
 
-#Environments
+# Environments
 
-##Supported environments:
+## Supported environments:
 dev and prod
 
 Each environment includes:
@@ -189,21 +189,21 @@ Each environment includes:
 - Separate ACR
 - Separate PostgreSQL instance
 
-#Configuration
+# Configuration
 
-##GitHub Secrets
+## GitHub Secrets
 - AZURE_CLIENT_ID
 - AZURE_TENANT_ID
 - AZURE_SUBSCRIPTION_ID
 
-#GitHub Variables
+# GitHub Variables
 ENV is replaced with target environment directly by the deploy pipelines
 - ACR_NAME_{ENV}
 - ACR_LOGIN_SERVER_{ENV}
 - RESOURCE_GROUP_{ENV}
 - AKS_CLUSTER_NAME_{ENV}
 
-##Terraform Variables (example)
+## Terraform Variables (example)
 ```bash
 image_ref               = "<acr>/backend:dev"
 frontend_image_ref      = "<acr>/frontend:dev"
@@ -211,7 +211,7 @@ grafana_admin_password  = "change-me"
 ````
 ⚠️ Do not store secrets in the remote repository.
 
-#Notes
+# Notes
 - Infrastructure is reproducible via Terraform
 - Deployments are fast via Kubernetes
 - CI/CD ensures code quality
