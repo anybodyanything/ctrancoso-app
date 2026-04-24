@@ -3,7 +3,7 @@ variable "image_ref" {
 }
 
 variable "db_secret_name" {
-  type = string
+  type    = string
   default = "postgres-secret"
 }
 

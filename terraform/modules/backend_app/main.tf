@@ -2,7 +2,7 @@ resource "kubernetes_deployment_v1" "backend" {
   metadata {
     name      = "backend"
     namespace = var.namespace
-    labels = {
+    labels    = {
       app = "backend"
     }
   }
