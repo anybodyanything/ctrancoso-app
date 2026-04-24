@@ -40,11 +40,16 @@ variable "vm_size" {
 }
 
 variable "tags" {
-  type = map(string)
+  type    = map(string)
   default = {
     environment = "dev"
     project     = "terraform-aks"
   }
+}
+
+variable "grafana_admin_password" {
+  type      = string
+  sensitive = true
 }
 
 #postgres variables

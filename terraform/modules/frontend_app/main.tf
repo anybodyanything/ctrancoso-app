@@ -2,7 +2,7 @@ resource "kubernetes_deployment_v1" "frontend" {
   metadata {
     name      = "frontend"
     namespace = "default"
-    labels = {
+    labels    = {
       app = "frontend"
     }
   }

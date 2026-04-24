@@ -19,6 +19,17 @@ module "aks" {
   ]
 }
 
+module "monitoring" {
+  source = "../../modules/monitoring"
+
+  grafana_admin_password = var.grafana_admin_password
+
+  depends_on = [
+    module.aks,
+    module.ingress
+  ]
+}
+
 module "postgreSQL" {
   source = "../../modules/postgres_db"
 
