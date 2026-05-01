@@ -1,5 +1,5 @@
 module "resource_group" {
-  source      = "../../modules/resource_group"
+  source      = "../../resources/resource_group"
   location    = var.global_region
   environment = local.env
   name        = local.rg_name
@@ -7,7 +7,7 @@ module "resource_group" {
 }
 
 module "aks" {
-  source              = "../../modules/kubernetes_service"
+  source              = "../../resources/kubernetes_service"
   name                = "${local.project}-${local.env}-aks"
   location            = var.global_region
   resource_group_name = module.resource_group.resource_group_name
@@ -20,7 +20,7 @@ module "aks" {
 }
 
 module "monitoring" {
-  source = "../../modules/monitoring"
+  source = "../../resources/monitoring"
 
   grafana_admin_password = var.grafana_admin_password
 
@@ -31,7 +31,7 @@ module "monitoring" {
 }
 
 module "postgreSQL" {
-  source = "../../modules/postgres_db"
+  source = "../../resources/postgres_db"
 
   server_name         = "${local.project}-${local.env}-postgres-server"
   admin_password      = var.admin_password
@@ -66,7 +66,7 @@ resource "kubernetes_secret_v1" "postgres" {
 }
 
 module "backend_app" {
-  source = "../../modules/backend_app"
+  source = "../../resources/backend_app"
 
   image_ref      = var.image_ref
   db_secret_name = kubernetes_secret_v1.postgres.metadata[0].name
@@ -77,7 +77,7 @@ module "backend_app" {
 }
 
 module "frontend_app" {
-  source = "../../modules/frontend_app"
+  source = "../../resources/frontend_app"
 
   image_ref = var.frontend_image_ref
 
@@ -87,7 +87,7 @@ module "frontend_app" {
 }
 
 module "ingress" {
-  source = "../../modules/ingress"
+  source = "../../resources/ingress"
 
   frontend_service_name      = module.frontend_app.service_name
   frontend_service_namespace = "default"
@@ -103,7 +103,7 @@ module "ingress" {
 }
 
 module "acr" {
-  source              = "../../modules/container_registry"
+  source              = "../../resources/container_registry"
   name                = "${local.project}${local.env}acr"
   resource_group_name = module.resource_group.resource_group_name
   location            = var.global_region
