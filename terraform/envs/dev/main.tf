@@ -120,3 +120,14 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
 output "app_url" {
   value = try("http://${module.ingress.ingress_ip}", "pending")
 }
+
+data "azurerm_user_assigned_identity" "github_contributor" {
+  name                = var.github_identity_name
+  resource_group_name = var.resource_group_name
+}
+
+module "roles" {
+  source              = "../../resources/iam_roles"
+  github_principal_id = data.azurerm_user_assigned_identity.github_contributor.principal_id
+  resource_group_name = module.resource_group.resource_group_id
+}

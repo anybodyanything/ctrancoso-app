@@ -76,3 +76,7 @@ variable "frontend_image_ref" {
   type        = string
   description = "Docker image from static frontend"
 }
+
+variable "github_identity_name" {
+  type = string
+}
